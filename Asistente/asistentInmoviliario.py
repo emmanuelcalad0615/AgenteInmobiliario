@@ -1,17 +1,20 @@
 from Asistente import webScraping
 import re
 import time
+from unidecode import unidecode
 
 
 class Propiedad:
-    def __init__(self, tipo:str, ubicacion: str, valor: int, habitaciones: int, lavados: int, dimension: int):
+    def __init__(self, tipo:str, ubicacion: str, valor: str, habitaciones: str, lavados: str, dimension: str):
         self.id: int = len(webScraping.propiedades_list)
         self.tipo: str = tipo
         self.ubicacion: str = ubicacion
-        self.dimension: int = dimension
-        self.valor: int = valor
-        self.habitaciones: int = habitaciones
-        self.lavados: int = lavados
+        self.dimension: str = dimension
+        self.valor: str = valor
+        self.habitaciones: str = habitaciones
+        self.lavados: str = lavados
+
+
 class Asistente:
     def __init__(self):
         self.propiedad: Propiedad
@@ -43,8 +46,31 @@ class Asistente:
         webScraping.propiedades_list.append(propiedad_add)
 
 
-    def buscar(self):
-        pass
+    def buscar(self, tipo: str = None, ubicacion: str = None, valor_max: int = None, habitaciones_minimas: int = None, lavados_minimos: int = None, dimension_minima: int = None) -> list [dict]:
+        propiedades_encontradas = []
+        for propiedad in webScraping.propiedades_list:
+            valor_int = int(propiedad["valor"].replace('$', '').replace('.', ''))
+            habitaciones_extraer = re.search(r"\d+", propiedad['habitaciones'])
+            habitaciones_int = int(habitaciones_extraer.group()) if habitaciones_extraer else 0
+            lavados_extraer = re.search(r"\d+", propiedad['lavados'])
+            lavados_int = int(lavados_extraer.group()) if lavados_extraer else 0
+            dimension_extraer = re.search(r"\d+", propiedad['dimension'])
+            dimension_int = int(dimension_extraer.group()) if dimension_extraer else 0
+
+            if  (tipo is None or tipo.lower() in unidecode(propiedad['tipo'].lower())) and \
+                (ubicacion is None or ubicacion.lower() in unidecode(propiedad["ubicacion"].lower())) and \
+                (valor_max is None or valor_int <= int(valor_max))and \
+                (habitaciones_minimas is None or habitaciones_int >= int(habitaciones_minimas)) and \
+                (lavados_minimos is None or lavados_int >=  int(lavados_minimos)) and \
+                (dimension_minima is None or dimension_int >= int(dimension_minima)):
+                propiedades_encontradas.append(propiedad)
+
+        return propiedades_encontradas
+
+
+
+
+
 
 
 
@@ -60,12 +86,12 @@ class Cliente:
             "░▀██┼█┼██▀░░░▄▓▓▓▓▓▓▓▄\n"
             "▄▄███████▄▄▄▄▄▄▄▄█▄▄▄▄\n"
         )
-        mensaje = f"{self.nombre}"
+        mensaje = f"Hola, {self.nombre}. Bienvenido a PropietyFinder, estoy a tus servicios."
 
 
 
         return (f"{casa}\n"
-                f"Hola, {self.nombre}. Bienvenido a PropietyFinder, estoy a tus servicios.")
+                f"{mensaje}")
 
     def mostrar_menu(self):
         menu = (" __  __              __  \n"
