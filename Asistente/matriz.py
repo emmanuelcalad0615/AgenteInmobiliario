@@ -1,6 +1,5 @@
 import random
 import pandas as pd
-from bs4 import  BeautifulSoup
 ciudades_colombia = ["Bogotá", "Medellín", "Cali", "Barranquilla", "Cartagena"]
 
 tipos_propiedad = ["Casa", "Apartamento", "Finca", "Lote", "Local comercial"]
