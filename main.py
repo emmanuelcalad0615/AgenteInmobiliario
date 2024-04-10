@@ -20,7 +20,7 @@ while opcion != 0:
 
         if opcion == 1:
 
-                catalogo = asistente.mostrar_catalogo()
+                catalogo = asistente.mostrar_catalogo(webScraping.propiedades_list)
                 print(catalogo)
 
 
@@ -35,7 +35,7 @@ while opcion != 0:
                 propiedad = asistentInmoviliario.Propiedad(tipo, ubicacion, valor, habitaciones, lavados, dimesion)
                 asistente = asistentInmoviliario.Asistente()
                 client1 = asistentInmoviliario.Cliente(nombre, asistente, propiedad)
-                propiedad_add = client1.agregar_venta()
+                propiedad_add = client1.agregar_venta(webScraping.propiedades_list)
                 propiedades_venta.append(propiedad_add)
                 print(webScraping.propiedades_list[-1])
 

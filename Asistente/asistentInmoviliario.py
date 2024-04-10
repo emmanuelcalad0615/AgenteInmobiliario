@@ -74,9 +74,9 @@ class Asistente:
     def __init__(self):
         self.propiedad: Propiedad
 
-    def mostrar_catalogo(self) -> str:
+    def mostrar_catalogo(self, propiedades: list[dict]) -> str:
         catalogo_str = ""
-        for idx, propiedad in enumerate(webScraping.propiedades_list, start=1):
+        for idx, propiedad in enumerate(propiedades, start=1):
             catalogo_str += f"Propiedad {idx}:\n"
             catalogo_str += f"Tipo: {propiedad.get('tipo', 'No disponible')}\n"
             catalogo_str += f"Ubicación: {propiedad.get('ubicacion', 'No disponible')}\n"
@@ -144,7 +144,7 @@ class Cliente:
         return (f"{casa}\n"
                 f"{mensaje}")
 
-    def agregar_venta(self) -> dict[str, str]:
+    def agregar_venta(self, propiedades: list[dict]) -> dict[str, str]:
         propiedad_add = {
             "id": self.propiedad.id,
             "tipo": self.propiedad.tipo,
@@ -154,7 +154,7 @@ class Cliente:
             "lavados": self.propiedad.lavados,
             "dimension": self.propiedad.dimension
         }
-        webScraping.propiedades_list.append(propiedad_add)
+        propiedades.append(propiedad_add)
         return propiedad_add
 
     def mostrar_propiedades_venta(self, propiedades_v: list[dict]) -> str:
