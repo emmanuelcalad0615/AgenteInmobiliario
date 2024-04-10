@@ -1,23 +1,26 @@
 from Asistente import asistentInmoviliario, webScraping
 
-
+asistente = asistentInmoviliario.Asistente()
 nombre = str(input("Ingrese su nombre: "))
-cliente = asistentInmoviliario.Cliente(nombre)
-saludo = cliente.__str__()
+cliente = asistentInmoviliario.Cliente(nombre, asistente)
+saludo = cliente.saludar()
 print(f"{saludo}")
 opcion = True
+propiedades_venta = []
+
+
 
 
 while opcion != 0:
 
-        cliente.mostrar_menu()
+        asistente.mostrar_menu()
         opcion = int(input("Ingrese una de las opciones: "))
 
 
 
         if opcion == 1:
-                asistente = asistentInmoviliario.Asistente()
-                catalogo = asistente.__str__()
+
+                catalogo = asistente.mostrar_catalogo()
                 print(catalogo)
 
 
@@ -31,7 +34,9 @@ while opcion != 0:
                 dimesion = str(input("Ingrese la dimension de la propiedad: "))
                 propiedad = asistentInmoviliario.Propiedad(tipo, ubicacion, valor, habitaciones, lavados, dimesion)
                 asistente = asistentInmoviliario.Asistente()
-                propiedad_add = asistente.propiedad_venta(propiedad)
+                client1 = asistentInmoviliario.Cliente(nombre, asistente, propiedad)
+                propiedad_add = client1.agregar_venta()
+                propiedades_venta.append(propiedad_add)
                 print(webScraping.propiedades_list[-1])
 
         if opcion == 3:
@@ -69,6 +74,10 @@ while opcion != 0:
                               f"Habitaciones: {propiedad.get('habitaciones', 'No disponible')}\n"
                               f"Baños: {propiedad.get('lavados', 'No disponible')}\n"
                               f"Dimension: {propiedad.get('dimension', 'No disponible')}\n")
+
+        if opcion == 4:
+                venta_str = cliente.mostrar_propiedades_venta(propiedades_venta)
+                print(venta_str)
 
 
 
